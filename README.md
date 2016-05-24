@@ -1,0 +1,2 @@
+# JEB
+Java Event Bus
