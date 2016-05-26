@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://pcsoft.org/jeb/config/bus"
+        xmlns:bus="http://pcsoft.org/jeb/config/bus">
+    <xs:simpleType name="XThreadRunner">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="CurrentThread"/>
+            <xs:enumeration value="NewThread"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="XBus">
+        <xs:attribute name="thread-runner" type="bus:XThreadRunner" use="optional" default="CurrentThread"/>
+        <xs:attribute name="default-class" type="xs:string" use="optional" default="org.pcsoft.framework.jeb.DefaultEventBus"/>
+    </xs:complexType>
+
+</xs:schema>

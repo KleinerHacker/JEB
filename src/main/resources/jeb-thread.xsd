@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://pcsoft.org/jeb/config/threading" xmlns:th="http://pcsoft.org/jeb/config/threading">
+    <xs:complexType name="XThreadPool" abstract="true"/>
+    <xs:complexType name="XCachedThreadPool">
+        <xs:complexContent>
+            <xs:extension base="th:XThreadPool"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="XFixedThreadPool">
+        <xs:complexContent>
+            <xs:extension base="th:XThreadPool">
+                <xs:attribute name="fixed-size" type="xs:int" use="optional" default="10"/>
+                <xs:attribute name="processor-core" type="xs:boolean" use="optional" default="false"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="XThreadFactory">
+        <xs:choice>
+            <xs:element name="CachedThreadPool" type="th:XCachedThreadPool"/>
+            <xs:element name="FixedThreadPool" type="th:XFixedThreadPool"/>
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>

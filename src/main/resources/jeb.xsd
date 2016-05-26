@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://pcsoft.org/jeb/config"
+           xmlns:conf="http://pcsoft.org/jeb/config"
+           xmlns:th="http://pcsoft.org/jeb/config/threading"
+           xmlns:bus="http://pcsoft.org/jeb/config/bus">
+
+    <xs:import namespace="http://pcsoft.org/jeb/config/threading" schemaLocation="jeb-thread.xsd"/>
+    <xs:import namespace="http://pcsoft.org/jeb/config/bus" schemaLocation="jeb-bus.xsd"/>
+
+    <xs:complexType name="XJEBConfiguration">
+        <xs:all>
+            <xs:element name="ThreadFactory" type="th:XThreadFactory" minOccurs="0"/>
+            <xs:element name="Bus" type="bus:XBus" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:element name="JEB-Configuration" type="conf:XJEBConfiguration"/>
+</xs:schema>
