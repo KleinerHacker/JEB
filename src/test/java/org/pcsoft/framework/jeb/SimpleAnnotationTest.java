@@ -3,6 +3,7 @@ package org.pcsoft.framework.jeb;
 import org.junit.Assert;
 import org.junit.Test;
 import org.pcsoft.framework.jeb.annotation.EventReceiver;
+import org.pcsoft.framework.jeb.type.listener.ReceiverHandler;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -18,6 +19,13 @@ public class SimpleAnnotationTest {
     @Test
     public void test() {
         eventBus.registerReceiverClass(this);
+
+        eventBus.registerReceiverMethod(Integer.class, new ReceiverHandler<Integer>() {
+            @Override
+            public void onReceive(Integer value) {
+                integerCounter.incrementAndGet();
+            }
+        });
 
         eventBus.send("Hallo");
         Assert.assertEquals(1, stringCounter.get());
@@ -47,11 +55,6 @@ public class SimpleAnnotationTest {
     @EventReceiver
     private void onReceiveString(final String value) {
         stringCounter.incrementAndGet();
-    }
-
-    @EventReceiver
-    private void onReceiveInteger(final Integer value) {
-        integerCounter.incrementAndGet();
     }
 
     @EventReceiver

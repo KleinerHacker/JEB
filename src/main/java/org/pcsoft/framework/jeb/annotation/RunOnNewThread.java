@@ -1,17 +1,18 @@
 package org.pcsoft.framework.jeb.annotation;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Created by pfeifchr on 27.05.2016.
  */
 @Documented
 @Retention(RUNTIME)
-@Target(METHOD)
-public @interface EventReceiver {
+@Target({ElementType.TYPE, ElementType.METHOD})
+@RunOnThreadQualifier
+public @interface RunOnNewThread {
 }

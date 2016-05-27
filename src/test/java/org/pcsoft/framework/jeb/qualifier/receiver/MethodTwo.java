@@ -1,4 +1,4 @@
-package org.pcsoft.framework.jeb.qualifier;
+package org.pcsoft.framework.jeb.qualifier.receiver;
 
 import org.pcsoft.framework.jeb.annotation.EventReceiverQualifier;
 

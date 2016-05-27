@@ -21,4 +21,10 @@
             <xs:element name="FixedThreadPool" type="th:XFixedThreadPool"/>
         </xs:choice>
     </xs:complexType>
+
+    <xs:complexType name="XThreadRunnerList">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="ThreadRunner" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
 </xs:schema>

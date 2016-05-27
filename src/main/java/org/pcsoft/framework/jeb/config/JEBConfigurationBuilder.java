@@ -2,15 +2,20 @@ package org.pcsoft.framework.jeb.config;
 
 import org.pcsoft.framework.jeb.DefaultEventBus;
 import org.pcsoft.framework.jeb.EventBus;
+import org.pcsoft.framework.jeb.annotation.handler.RunOnThread;
+import org.pcsoft.framework.jeb.annotation.handler.SurroundAction;
 import org.pcsoft.framework.jeb.type.ThreadPoolType;
-import org.pcsoft.framework.jeb.type.ThreadRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class JEBConfigurationBuilder {
-    protected ThreadRunner threadRunner = ThreadRunner.CurrentThread;
     protected Class<? extends EventBus> eventBusClass = DefaultEventBus.class;
     protected ThreadPoolType threadPoolType = ThreadPoolType.FixedPool;
     protected int fixedThreadSize = 10;
     protected boolean processorCores = false;
+    protected final List<Class<? extends RunOnThread>> threadRunnerClassList = new ArrayList<>();
+    protected final List<Class<? extends SurroundAction>> surroundActionClassList = new ArrayList<>();
 
     public JEBConfigurationBuilder withCachedThreadPool() {
         this.threadPoolType = ThreadPoolType.CachedPool;
@@ -31,13 +36,18 @@ public abstract class JEBConfigurationBuilder {
         return this;
     }
 
-    public JEBConfigurationBuilder withRunningOnThread(final ThreadRunner threadRunner) {
-        this.threadRunner = threadRunner;
+    public JEBConfigurationBuilder withDefaultEventBusClass(final Class<? extends EventBus> clazz) {
+        this.eventBusClass = clazz;
         return this;
     }
 
-    public JEBConfigurationBuilder withDefaultEventBusClass(final Class<? extends EventBus> clazz) {
-        this.eventBusClass = clazz;
+    public JEBConfigurationBuilder withAdditionalThreadRunner(final Class<? extends RunOnThread> threadRunnerClass) {
+        this.threadRunnerClassList.add(threadRunnerClass);
+        return this;
+    }
+
+    public JEBConfigurationBuilder withAdditionalSurroundAction(final Class<? extends SurroundAction> surroundActionClass) {
+        this.surroundActionClassList.add(surroundActionClass);
         return this;
     }
 

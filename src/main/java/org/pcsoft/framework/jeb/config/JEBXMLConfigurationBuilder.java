@@ -1,8 +1,10 @@
 package org.pcsoft.framework.jeb.config;
 
 import org.pcsoft.framework.jeb.EventBus;
+import org.pcsoft.framework.jeb.annotation.handler.RunOnThread;
+import org.pcsoft.framework.jeb.annotation.handler.SurroundAction;
+import org.pcsoft.framework.jeb.exception.JEBConfigurationException;
 import org.pcsoft.framework.jeb.type.ThreadPoolType;
-import org.pcsoft.framework.jeb.type.ThreadRunner;
 import org.pcsoft.jeb.config.XJEBConfiguration;
 
 /**
@@ -11,13 +13,12 @@ import org.pcsoft.jeb.config.XJEBConfiguration;
 class JEBXMLConfigurationBuilder extends JEBDefaultConfigurationBuilder {
     public JEBXMLConfigurationBuilder(XJEBConfiguration configuration) {
         if (configuration.getBus() != null) {
-            this.threadRunner = ThreadRunner.from(configuration.getBus().getThreadRunner());
             try {
                 this.eventBusClass = (Class<? extends EventBus>) Class.forName(configuration.getBus().getDefaultClass());
             } catch (ClassNotFoundException e) {
-                throw new IllegalStateException("Unable to find event bus class: " + configuration.getBus().getDefaultClass(), e);
+                throw new JEBConfigurationException("Unable to find event bus class: " + configuration.getBus().getDefaultClass(), e);
             } catch (ClassCastException e) {
-                throw new IllegalStateException("The given event bus class is not implemented " + EventBus.class + ": " + configuration.getBus().getDefaultClass());
+                throw new JEBConfigurationException("The given event bus class is not implemented " + EventBus.class + ": " + configuration.getBus().getDefaultClass());
             }
         }
         if (configuration.getThreadFactory() != null) {
@@ -27,6 +28,24 @@ class JEBXMLConfigurationBuilder extends JEBDefaultConfigurationBuilder {
                 this.threadPoolType = ThreadPoolType.FixedPool;
                 this.fixedThreadSize = configuration.getThreadFactory().getFixedThreadPool().getFixedSize();
                 this.processorCores = configuration.getThreadFactory().getFixedThreadPool().isProcessorCore();
+            }
+        }
+        if (configuration.getThreadRunners() != null) {
+            for (final String threadRunnerClassString : configuration.getThreadRunners().getThreadRunner()) {
+                try {
+                    this.threadRunnerClassList.add((Class<? extends RunOnThread>) Class.forName(threadRunnerClassString));
+                } catch (ClassNotFoundException e) {
+                    throw new JEBConfigurationException("Unable to find thread runner class: " + threadRunnerClassString, e);
+                }
+            }
+        }
+        if (configuration.getSurroundActions() != null) {
+            for (final String surroundActionClassString : configuration.getSurroundActions().getSurroundAction()) {
+                try {
+                    this.surroundActionClassList.add((Class<? extends SurroundAction>) Class.forName(surroundActionClassString));
+                } catch (ClassNotFoundException e) {
+                    throw new JEBConfigurationException("Unable to find surround action class: " + surroundActionClassString, e);
+                }
             }
         }
     }

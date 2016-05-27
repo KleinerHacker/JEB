@@ -1,14 +1,14 @@
 package org.pcsoft.framework.jeb.utils.bus.descriptor;
 
 import org.pcsoft.framework.jeb.annotation.EventReceiver;
-import org.pcsoft.framework.jeb.annotation.EventReceiverQualifier;
-import org.pcsoft.framework.jeb.type.ThreadRunner;
 import org.pcsoft.framework.jeb.type.listener.ReceiverHandler;
+import org.pcsoft.framework.jeb.utils.AnnotationReaderUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,28 +17,25 @@ import java.util.List;
 public final class ReceiverMethodDescriptor {
     private final Method receiverMethod;
     private final ReceiverQualifierKey qualifierKey;
-    private final ThreadRunner threadRunner;
+    private final Annotation threadRunnerAnnotation;
+    private final List<Annotation> surroundAnnotationList = new ArrayList<>();
 
     private final Object instance;
 
-    public <T>ReceiverMethodDescriptor(final Class<T> parameterClass, final ReceiverHandler<T> receiverHandler, final ThreadRunner threadRunner) {
+    public <T>ReceiverMethodDescriptor(final Class<T> parameterClass, final ReceiverHandler<T> receiverHandler) {
         final Method method;
         try {
             method = receiverHandler.getClass().getMethod("onReceive", parameterClass);
+            method.setAccessible(true);
         } catch (NoSuchMethodException e) {
             throw new IllegalArgumentException("Unable to find Method!", e);
         }
-        final Annotation[] annotations = method.getAnnotations();
-        final List<Annotation> qualifierAnnotationList = new ArrayList<>();
-        for (final Annotation annotation : annotations) {
-            if (annotation.getClass().getAnnotation(EventReceiverQualifier.class) == null)
-                continue;
-            qualifierAnnotationList.add(annotation);
-        }
+        final List<Annotation> qualifierAnnotationList = AnnotationReaderUtils.findQualifierAnnotations(method);
 
         this.receiverMethod = method;
-        this.threadRunner = threadRunner;
+        this.threadRunnerAnnotation = AnnotationReaderUtils.findThreadRunnerAnnotation(method, false);
         this.qualifierKey = new ReceiverQualifierKey(parameterClass, qualifierAnnotationList);
+        this.surroundAnnotationList.addAll(AnnotationReaderUtils.findSurroundActionAnnotations(method));
 
         this.instance = receiverHandler;
     }
@@ -52,17 +49,12 @@ public final class ReceiverMethodDescriptor {
         if (method.getParameterTypes().length != 1)
             throw new IllegalArgumentException("Method with not exact one parameter: " + method.toString());
 
-        final Annotation[] annotations = method.getAnnotations();
-        final List<Annotation> qualifierAnnotationList = new ArrayList<>();
-        for (final Annotation annotation : annotations) {
-            if (annotation.getClass().getAnnotation(EventReceiverQualifier.class) == null)
-                continue;
-            qualifierAnnotationList.add(annotation);
-        }
+        final List<Annotation> qualifierAnnotationList = AnnotationReaderUtils.findQualifierAnnotations(method);
 
         this.receiverMethod = method;
-        this.threadRunner = method.getAnnotation(EventReceiver.class).runOnThread();
+        this.threadRunnerAnnotation = AnnotationReaderUtils.findThreadRunnerAnnotation(method, false);
         this.qualifierKey = new ReceiverQualifierKey(method.getParameterTypes()[0], qualifierAnnotationList);
+        this.surroundAnnotationList.addAll(AnnotationReaderUtils.findSurroundActionAnnotations(method));
 
         this.instance = instance;
     }
@@ -79,7 +71,11 @@ public final class ReceiverMethodDescriptor {
         return instance;
     }
 
-    public ThreadRunner getThreadRunner() {
-        return threadRunner;
+    public Annotation getThreadRunnerAnnotation() {
+        return threadRunnerAnnotation;
+    }
+
+    public List<Annotation> getSurroundAnnotationList() {
+        return Collections.unmodifiableList(surroundAnnotationList);
     }
 }

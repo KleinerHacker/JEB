@@ -7,12 +7,20 @@
     <xs:import namespace="http://pcsoft.org/jeb/config/threading" schemaLocation="jeb-thread.xsd"/>
     <xs:import namespace="http://pcsoft.org/jeb/config/bus" schemaLocation="jeb-bus.xsd"/>
 
+    <xs:complexType name="XSurroundActionList">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="SurroundAction" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="XJEBConfiguration">
         <xs:all>
             <xs:element name="ThreadFactory" type="th:XThreadFactory" minOccurs="0"/>
+            <xs:element name="ThreadRunners" type="th:XThreadRunnerList" minOccurs="0"/>
             <xs:element name="Bus" type="bus:XBus" minOccurs="0"/>
+            <xs:element name="SurroundActions" type="conf:XSurroundActionList" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 
-    <xs:element name="JEB-Configuration" type="conf:XJEBConfiguration"/>
+    <xs:element name="JEBConfiguration" type="conf:XJEBConfiguration"/>
 </xs:schema>

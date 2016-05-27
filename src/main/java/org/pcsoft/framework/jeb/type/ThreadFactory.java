@@ -13,15 +13,15 @@ public final class ThreadFactory {
 
     public static ThreadFactory getInstance(JEBConfiguration configuration) {
         if (INSTANCE == null) {
-            switch (configuration.getThreadConfiguration().getThreadPoolType()) {
+            switch (configuration.getThreadFactoryConfiguration().getThreadPoolType()) {
                 case CachedPool:
                     INSTANCE = new ThreadFactory(Executors.newCachedThreadPool());
                     break;
                 case FixedPool:
                     INSTANCE = new ThreadFactory(Executors.newFixedThreadPool(
-                            configuration.getThreadConfiguration().isProcessorCores() ?
+                            configuration.getThreadFactoryConfiguration().isProcessorCores() ?
                                     Runtime.getRuntime().availableProcessors() :
-                                    configuration.getThreadConfiguration().getMaxThreadCount()
+                                    configuration.getThreadFactoryConfiguration().getMaxThreadCount()
                     ));
                     break;
                 default:

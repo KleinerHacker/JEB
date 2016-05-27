@@ -1,4 +1,4 @@
-package org.pcsoft.framework.jeb.qualifier;
+package org.pcsoft.framework.jeb.qualifier.receiver;
 
 import org.pcsoft.framework.jeb.annotation.EventReceiverQualifier;
 
@@ -16,5 +16,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target(METHOD)
 @EventReceiverQualifier
-public @interface MethodOne {
+public @interface MethodWithValue {
+    int identifier();
 }

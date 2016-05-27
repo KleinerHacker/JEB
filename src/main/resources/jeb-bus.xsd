@@ -9,7 +9,6 @@
     </xs:simpleType>
 
     <xs:complexType name="XBus">
-        <xs:attribute name="thread-runner" type="bus:XThreadRunner" use="optional" default="CurrentThread"/>
         <xs:attribute name="default-class" type="xs:string" use="optional" default="org.pcsoft.framework.jeb.DefaultEventBus"/>
     </xs:complexType>
 
