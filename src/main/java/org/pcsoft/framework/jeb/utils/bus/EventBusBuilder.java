@@ -15,7 +15,7 @@ import java.lang.reflect.Proxy;
 import java.util.List;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Represent an {@link EventBus}-Builder. It creates a proxy based on event bus interface.
  */
 public final class EventBusBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventBusBuilder.class);
@@ -29,10 +29,11 @@ public final class EventBusBuilder {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            //Handle basics with default implementation
             if (method.getName().equals("getParentEventBusManager") && method.getDeclaringClass() == EventBus.class) {
                 return this.eventBus.getParentEventBusManager();
-            } else if (method.getName().equals("getThreadRunnerManager") && method.getDeclaringClass() == EventBus.class) {
-                return this.eventBus.getThreadRunnerManager();
+            } else if (method.getName().equals("getRunOnThreadManager") && method.getDeclaringClass() == EventBus.class) {
+                return this.eventBus.getRunOnThreadManager();
             } else if (method.getName().equals("getSurroundManager") && method.getDeclaringClass() == EventBus.class) {
                 return this.eventBus.getSurroundManager();
             } else if (method.getName().equals("registerReceiverClass") && method.getDeclaringClass() == EventBus.class) {
@@ -48,6 +49,7 @@ public final class EventBusBuilder {
                 this.eventBus.unregisterReceiverMethod((ReceiverHandler) args[0]);
                 return null;
             } else {
+                //Handle special sender methods
                 if (method.getAnnotation(CustomEventBus.Sender.class) != null) {
                     runSendMethod(method, args[0]);
                 }
@@ -55,6 +57,11 @@ public final class EventBusBuilder {
             }
         }
 
+        /**
+         * Run the sending algorithm, based on annotations
+         * @param method
+         * @param arg
+         */
         private void runSendMethod(Method method, Object arg) {
             if (method.getAnnotation(CustomEventBus.Sender.class) == null)
                 throw new IllegalArgumentException("Method is not a send method: " + method.toString());
@@ -69,6 +76,13 @@ public final class EventBusBuilder {
         }
     }
 
+    /**
+     * Build a new event {@link EventBus} based on the given event bus interface.
+     * @param eventBusClass
+     * @param eventBusManager
+     * @param <T>
+     * @return
+     */
     public static <T extends EventBus> T build(final Class<T> eventBusClass, final EventBusManager eventBusManager) {
         LOGGER.debug("Build new event bus, based on class: " + eventBusClass.getName());
         return (T) Proxy.newProxyInstance(EventBusBuilder.class.getClassLoader(), new Class[]{EventBus.class, eventBusClass}, new EventBussProxy(eventBusManager));

@@ -1,5 +1,6 @@
 package org.pcsoft.framework.jeb.annotation;
 
+import org.pcsoft.framework.jeb.annotation.handler.SurroundHandlerMethodLogger;
 import org.pcsoft.framework.jeb.type.LoggingLevel;
 import org.pcsoft.framework.jeb.type.PrintType;
 
@@ -11,7 +12,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Created by pfeifchr on 27.05.2016.
+ * Annotation to use simple method logging surround handler to log out the method entry and exit moments.
  */
 @Documented
 @Retention(RUNTIME)
@@ -20,4 +21,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface SurroundMethodLogger {
     PrintType printType() default PrintType.MethodAndClass;
     LoggingLevel loggingLevel() default LoggingLevel.Trace;
+    Class loggingClass() default SurroundHandlerMethodLogger.class;
 }

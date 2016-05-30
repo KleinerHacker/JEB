@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Represent a qualifier key, based on parameter class and qualifier annotations. Equals and Hashcode are implemented for this key.
  */
 public final class ReceiverQualifierKey {
     private final Class<?> parameterClass;
@@ -27,10 +27,18 @@ public final class ReceiverQualifierKey {
         this.qualifierAnnotationList.addAll(Arrays.asList(qualifierAnnotations));
     }
 
+    /**
+     * Type of parameter
+     * @return
+     */
     public Class<?> getParameterClass() {
         return parameterClass;
     }
 
+    /**
+     * List of qualifier annotations. Can be empty.
+     * @return
+     */
     public List<Annotation> getQualifierAnnotationList() {
         return qualifierAnnotationList;
     }

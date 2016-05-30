@@ -5,9 +5,13 @@ import org.pcsoft.framework.jeb.config.JEBConfiguration;
 import java.lang.annotation.Annotation;
 
 /**
- * Created by pfeifchr on 27.05.2016.
+ * Interface for all Run-On-Thread Handler.<br/>
+ * <br/>
+ * To implement a Run-On-Thread Handler implement this interface and annotate the class with a qualified annotation.
+ * This annotation must be annotated with {@link org.pcsoft.framework.jeb.annotation.RunOnThreadQualifier} for
+ * identification of this class as handler class, like classpath scanning.
  */
-public interface RunOnThread<T extends Annotation> {
+public interface RunOnThreadHandler<T extends Annotation> {
     public interface MethodInvokeListener {
         void onInvokeMethod();
     }

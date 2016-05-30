@@ -6,9 +6,6 @@ import org.pcsoft.framework.jeb.annotation.EventReceiver;
 import org.pcsoft.framework.jeb.qualifier.receiver.MethodOne;
 import org.pcsoft.framework.jeb.qualifier.receiver.MethodTwo;
 
-/**
- * Created by pfeifchr on 27.05.2016.
- */
 public class ReceiverMethodDescriptorTest {
 
     @Test

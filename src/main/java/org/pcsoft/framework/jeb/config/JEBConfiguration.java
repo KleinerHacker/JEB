@@ -1,8 +1,8 @@
 package org.pcsoft.framework.jeb.config;
 
 import org.pcsoft.framework.jeb.EventBus;
-import org.pcsoft.framework.jeb.annotation.handler.RunOnThread;
-import org.pcsoft.framework.jeb.annotation.handler.SurroundAction;
+import org.pcsoft.framework.jeb.annotation.handler.RunOnThreadHandler;
+import org.pcsoft.framework.jeb.annotation.handler.SurroundHandler;
 import org.pcsoft.framework.jeb.type.ThreadPoolType;
 
 import java.util.ArrayList;
@@ -11,9 +11,39 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Represent the configuration interface for the JEB framework
  */
 public interface JEBConfiguration {
+    /**
+     * Contains settings for classpath scanning
+     */
+    public static final class ClasspathScanningConfiguration {
+        private final String packageRestriction;
+
+        public ClasspathScanningConfiguration() {
+            this(null);
+        }
+
+        public ClasspathScanningConfiguration(String packageRestriction) {
+            this.packageRestriction = packageRestriction;
+        }
+
+        public String getPackageRestriction() {
+            return packageRestriction;
+        }
+
+        @Override
+        public String toString() {
+            return "ClasspathScanningConfiguration{" +
+                    "packageRestriction='" + packageRestriction + '\'' +
+                    '}';
+        }
+    }
+
+    /**
+     * Contains settings for builtin thread factory, see {@link org.pcsoft.framework.jeb.type.ThreadFactory}, {@link org.pcsoft.framework.jeb.annotation.RunOnNewThread},
+     * {@link org.pcsoft.framework.jeb.annotation.handler.RunOnThreadNewThreadHandler}
+     */
     public static final class ThreadFactoryConfiguration {
         private final ThreadPoolType threadPoolType;
         private final int maxThreadCount;
@@ -25,14 +55,26 @@ public interface JEBConfiguration {
             this.processorCores = processorCores;
         }
 
+        /**
+         * Max count of threads in case of a fixed thread pool and {@link #isProcessorCores()} is <code>false</code>.
+         * @return
+         */
         public int getMaxThreadCount() {
             return maxThreadCount;
         }
 
+        /**
+         * TRUE if count of processor cores of machine is used (fixed thread pool only), otherwise FALSE, see {@link #getMaxThreadCount()}
+         * @return
+         */
         public boolean isProcessorCores() {
             return processorCores;
         }
 
+        /**
+         * Returns the configured {@link ThreadPoolType}
+         * @return
+         */
         public ThreadPoolType getThreadPoolType() {
             return threadPoolType;
         }
@@ -47,25 +89,46 @@ public interface JEBConfiguration {
         }
     }
 
-    public static final class ThreadRunnerConfiguration {
-        private final List<Class<? extends RunOnThread>> threadRunnerClassList = new ArrayList<>();
+    /**
+     * Configuration for run on thread system
+     */
+    public static final class RunOnThreadConfiguration {
+        private final List<Class<? extends RunOnThreadHandler>> runOnThreadHandlerClassList = new ArrayList<>();
+        private final ClasspathScanningConfiguration classpathScanningConfiguration;
 
-        ThreadRunnerConfiguration(final Collection<Class<? extends RunOnThread>> collection) {
-            threadRunnerClassList.addAll(collection);
+        RunOnThreadConfiguration(final Collection<Class<? extends RunOnThreadHandler>> collection, ClasspathScanningConfiguration classpathScanningConfiguration) {
+            runOnThreadHandlerClassList.addAll(collection);
+            this.classpathScanningConfiguration = classpathScanningConfiguration;
         }
 
-        public List<Class<? extends RunOnThread>> getThreadRunnerClassList() {
-            return Collections.unmodifiableList(threadRunnerClassList);
+        /**
+         * Run-On-Thread Handler classes
+         * @return
+         */
+        public List<Class<? extends RunOnThreadHandler>> getRunOnThreadHandlerClassList() {
+            return Collections.unmodifiableList(runOnThreadHandlerClassList);
+        }
+
+        /**
+         * Classpath scanning settings, can be NULL
+         * @return
+         */
+        public ClasspathScanningConfiguration getClasspathScanningConfiguration() {
+            return classpathScanningConfiguration;
         }
 
         @Override
         public String toString() {
-            return "ThreadRunnerConfiguration{" +
-                    "threadRunnerClassList=" + threadRunnerClassList +
+            return "RunOnThreadConfiguration{" +
+                    "classpathScanningConfiguration=" + classpathScanningConfiguration +
+                    ", runOnThreadHandlerClassList=" + runOnThreadHandlerClassList +
                     '}';
         }
     }
 
+    /**
+     * Configuration for BUS
+     */
     public static final class BusConfiguration {
         private final Class<? extends EventBus> eventBusClass;
 
@@ -73,6 +136,10 @@ public interface JEBConfiguration {
             this.eventBusClass = eventBusClass;
         }
 
+        /**
+         * Returns the default event bus class
+         * @return
+         */
         public Class<? extends EventBus> getEventBusClass() {
             return eventBusClass;
         }
@@ -85,27 +152,64 @@ public interface JEBConfiguration {
         }
     }
 
+    /**
+     * Configuration for surround system
+     */
     public static final class SurroundConfiguration {
-        private final List<Class<? extends SurroundAction>> surroundActionClassList = new ArrayList<>();
+        private final List<Class<? extends SurroundHandler>> surroundHandlerClassList = new ArrayList<>();
+        private final ClasspathScanningConfiguration classpathScanningConfiguration;
 
-        SurroundConfiguration(final Collection<Class<? extends SurroundAction>> collection)  {
-            surroundActionClassList.addAll(collection);
+        SurroundConfiguration(final Collection<Class<? extends SurroundHandler>> collection, ClasspathScanningConfiguration classpathScanningConfiguration)  {
+            surroundHandlerClassList.addAll(collection);
+            this.classpathScanningConfiguration = classpathScanningConfiguration;
         }
 
-        public List<Class<? extends SurroundAction>> getSurroundActionClassList() {
-            return surroundActionClassList;
+        /**
+         * Surround handler classes
+         * @return
+         */
+        public List<Class<? extends SurroundHandler>> getSurroundHandlerClassList() {
+            return surroundHandlerClassList;
+        }
+
+        /**
+         * Classpath scanning settings, can be NULL
+         * @return
+         */
+        public ClasspathScanningConfiguration getClasspathScanningConfiguration() {
+            return classpathScanningConfiguration;
         }
 
         @Override
         public String toString() {
             return "SurroundConfiguration{" +
-                    "surroundActionClassList=" + surroundActionClassList +
+                    "classpathScanningConfiguration=" + classpathScanningConfiguration +
+                    ", surroundHandlerClassList=" + surroundHandlerClassList +
                     '}';
         }
     }
 
+    /**
+     * Returns settings for builtin {@link org.pcsoft.framework.jeb.type.ThreadFactory}
+     * @return
+     */
     ThreadFactoryConfiguration getThreadFactoryConfiguration();
-    ThreadRunnerConfiguration getThreadRunnerConfiguration();
+
+    /**
+     * Returns settings for Run-On-Thread System
+     * @return
+     */
+    RunOnThreadConfiguration getRunOnThreadConfiguration();
+
+    /**
+     * Returns settings for BUS
+     * @return
+     */
     BusConfiguration getBusConfiguration();
+
+    /**
+     * Returns settings for surround system
+     * @return
+     */
     SurroundConfiguration getSurroundConfiguration();
 }

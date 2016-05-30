@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Represent the builtin Thread Factory to handler {@link org.pcsoft.framework.jeb.annotation.RunOnNewThread}
  */
 public final class ThreadFactory {
     private static ThreadFactory INSTANCE;

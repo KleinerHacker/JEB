@@ -6,9 +6,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * Created by pfeifchr on 27.05.2016.
+ * Interface for all Surround Handler.<br/>
+ * <br/>
+ * To implement a Surround Handler a class must implement this interface and annotate the class with a qualified annotation.
+ * This annotation must be annotated with {@link org.pcsoft.framework.jeb.annotation.SurroundQualifier} for
+ * identification of this class as handler class, like classpath scanning.
  */
-public interface SurroundAction<T extends Annotation> {
+public interface SurroundHandler<T extends Annotation> {
     void onPreInvoke(final T annotation, final Method method, final Object value);
     void onPostInvoke(final T annotation, final Method method, final Object value);
 

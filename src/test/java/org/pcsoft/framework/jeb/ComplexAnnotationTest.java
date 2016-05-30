@@ -10,9 +10,6 @@ import org.pcsoft.framework.jeb.type.listener.ReceiverHandler;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by pfeifchr on 26.05.2016.
- */
 public class ComplexAnnotationTest {
     @CustomEventBus
     public interface MyEventBus extends EventBus {

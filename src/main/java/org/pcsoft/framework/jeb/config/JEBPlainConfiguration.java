@@ -1,19 +1,19 @@
 package org.pcsoft.framework.jeb.config;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Plain JEB configuration implementation
  */
 final class JEBPlainConfiguration implements JEBConfiguration {
     private final ThreadFactoryConfiguration threadFactoryConfiguration;
-    private final ThreadRunnerConfiguration threadRunnerConfiguration;
+    private final RunOnThreadConfiguration runOnThreadConfiguration;
     private final BusConfiguration busConfiguration;
     private final SurroundConfiguration surroundConfiguration;
 
-    public JEBPlainConfiguration(BusConfiguration busConfiguration, ThreadFactoryConfiguration threadFactoryConfiguration, ThreadRunnerConfiguration threadRunnerConfiguration,
+    public JEBPlainConfiguration(BusConfiguration busConfiguration, ThreadFactoryConfiguration threadFactoryConfiguration, RunOnThreadConfiguration runOnThreadConfiguration,
                                  SurroundConfiguration surroundConfiguration) {
         this.busConfiguration = busConfiguration;
         this.threadFactoryConfiguration = threadFactoryConfiguration;
-        this.threadRunnerConfiguration = threadRunnerConfiguration;
+        this.runOnThreadConfiguration = runOnThreadConfiguration;
         this.surroundConfiguration = surroundConfiguration;
     }
 
@@ -27,9 +27,8 @@ final class JEBPlainConfiguration implements JEBConfiguration {
         return threadFactoryConfiguration;
     }
 
-    @Override
-    public ThreadRunnerConfiguration getThreadRunnerConfiguration() {
-        return threadRunnerConfiguration;
+    public RunOnThreadConfiguration getRunOnThreadConfiguration() {
+        return runOnThreadConfiguration;
     }
 
     @Override
@@ -42,7 +41,7 @@ final class JEBPlainConfiguration implements JEBConfiguration {
         return "JEBPlainConfiguration{" +
                 "busConfiguration=" + busConfiguration +
                 ", threadFactoryConfiguration=" + threadFactoryConfiguration +
-                ", threadRunnerConfiguration=" + threadRunnerConfiguration +
+                ", threadRunnerConfiguration=" + runOnThreadConfiguration +
                 ", surroundConfiguration=" + surroundConfiguration +
                 '}';
     }

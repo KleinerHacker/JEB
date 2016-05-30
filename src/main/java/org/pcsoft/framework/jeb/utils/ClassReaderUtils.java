@@ -9,11 +9,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Class Reader Utils
  */
 public final class ClassReaderUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassReaderUtils.class);
 
+    /**
+     * Read the receiver class and visit all methods that annotated with {@link EventReceiver}
+     * @param clazz
+     * @param methodVisitor
+     */
     public static void readReceiverClass(final Class<?> clazz, MethodVisitor methodVisitor) {
         Class<?> currentClass = clazz;
         while (currentClass != null && currentClass != Object.class) {

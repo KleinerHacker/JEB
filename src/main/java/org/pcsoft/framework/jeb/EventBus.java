@@ -4,19 +4,58 @@ import org.pcsoft.framework.jeb.annotation.CustomEventBus;
 import org.pcsoft.framework.jeb.type.listener.ReceiverHandler;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Represent the event bus base interface.
  */
 public interface EventBus {
+    /**
+     * Manager for event bus system
+     * @return
+     */
     EventBusManager getParentEventBusManager();
-    RunOnThreadManager getThreadRunnerManager();
+
+    /**
+     * Manager for Run-On-Thread system
+     * @return
+     */
+    RunOnThreadManager getRunOnThreadManager();
+
+    /**
+     * Manager for surround system
+     * @return
+     */
     SurroundManager getSurroundManager();
 
+    /**
+     * Register a new receiver class
+     * @param value
+     */
     void registerReceiverClass(final Object value);
+
+    /**
+     * Unregister a receiver class
+     * @param value
+     */
     void unregisterReceiverClass(final Object value);
 
+    /**
+     * Register manually a receiver method via {@link ReceiverHandler}, based on given parameter class.
+     * @param parameterClass
+     * @param receiverHandler
+     * @param <T>
+     */
     <T>void registerReceiverMethod(final Class<T> parameterClass, final ReceiverHandler<T> receiverHandler);
+
+    /**
+     * Unregister manually a receiver method via {@link ReceiverHandler}
+     * @param receiverHandler
+     * @param <T>
+     */
     <T>void unregisterReceiverMethod(final ReceiverHandler<T> receiverHandler);
 
+    /**
+     * Default sender method
+     * @param value
+     */
     @CustomEventBus.Sender
     void send(Object value);
 }

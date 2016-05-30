@@ -1,12 +1,9 @@
 package org.pcsoft.framework.jeb.qualifier.threading;
 
-import org.pcsoft.framework.jeb.annotation.handler.RunOnThreadBase;
+import org.pcsoft.framework.jeb.annotation.handler.RunOnThreadHandlerBase;
 
-/**
- * Created by pfeifchr on 27.05.2016.
- */
 @RunOnMyThread2
-public class RunOnThreadMyThread2 extends RunOnThreadBase<RunOnMyThread2> {
+public class RunOnMyThread2Handler extends RunOnThreadHandlerBase<RunOnMyThread2> {
     public static final String THREAD_NAME = "MyThread.2";
 
     @Override

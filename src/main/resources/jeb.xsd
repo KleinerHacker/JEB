@@ -2,23 +2,26 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://pcsoft.org/jeb/config"
            xmlns:conf="http://pcsoft.org/jeb/config"
            xmlns:th="http://pcsoft.org/jeb/config/threading"
-           xmlns:bus="http://pcsoft.org/jeb/config/bus">
+           xmlns:bus="http://pcsoft.org/jeb/config/bus"
+           xmlns:c="http://pcsoft.org/jeb/config/common">
 
     <xs:import namespace="http://pcsoft.org/jeb/config/threading" schemaLocation="jeb-thread.xsd"/>
     <xs:import namespace="http://pcsoft.org/jeb/config/bus" schemaLocation="jeb-bus.xsd"/>
+    <xs:import namespace="http://pcsoft.org/jeb/config/common" schemaLocation="jeb-common.xsd"/>
 
-    <xs:complexType name="XSurroundActionList">
+    <xs:complexType name="XSurroundHandlerList">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="SurroundAction" type="xs:string"/>
+            <xs:element name="SurroundHandler" type="xs:string"/>
         </xs:sequence>
+        <xs:attributeGroup ref="c:XClassPathScanning"/>
     </xs:complexType>
 
     <xs:complexType name="XJEBConfiguration">
         <xs:all>
             <xs:element name="ThreadFactory" type="th:XThreadFactory" minOccurs="0"/>
-            <xs:element name="ThreadRunners" type="th:XThreadRunnerList" minOccurs="0"/>
+            <xs:element name="RunOnThreadHandlers" type="th:XRunOnThreadHandlerList" minOccurs="0"/>
             <xs:element name="Bus" type="bus:XBus" minOccurs="0"/>
-            <xs:element name="SurroundActions" type="conf:XSurroundActionList" minOccurs="0"/>
+            <xs:element name="SurroundHandlers" type="conf:XSurroundHandlerList" minOccurs="0"/>
         </xs:all>
     </xs:complexType>
 

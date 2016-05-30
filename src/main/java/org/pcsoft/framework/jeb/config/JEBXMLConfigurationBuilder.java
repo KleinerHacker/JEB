@@ -1,14 +1,14 @@
 package org.pcsoft.framework.jeb.config;
 
 import org.pcsoft.framework.jeb.EventBus;
-import org.pcsoft.framework.jeb.annotation.handler.RunOnThread;
-import org.pcsoft.framework.jeb.annotation.handler.SurroundAction;
+import org.pcsoft.framework.jeb.annotation.handler.RunOnThreadHandler;
+import org.pcsoft.framework.jeb.annotation.handler.SurroundHandler;
+import org.pcsoft.framework.jeb.config.xml.XJEBConfiguration;
 import org.pcsoft.framework.jeb.exception.JEBConfigurationException;
 import org.pcsoft.framework.jeb.type.ThreadPoolType;
-import org.pcsoft.jeb.config.XJEBConfiguration;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Configuration builder for XML
  */
 class JEBXMLConfigurationBuilder extends JEBDefaultConfigurationBuilder {
     public JEBXMLConfigurationBuilder(XJEBConfiguration configuration) {
@@ -30,23 +30,27 @@ class JEBXMLConfigurationBuilder extends JEBDefaultConfigurationBuilder {
                 this.processorCores = configuration.getThreadFactory().getFixedThreadPool().isProcessorCore();
             }
         }
-        if (configuration.getThreadRunners() != null) {
-            for (final String threadRunnerClassString : configuration.getThreadRunners().getThreadRunner()) {
+        if (configuration.getRunOnThreadHandlers() != null) {
+            for (final String runOnThreadHandlerClassString : configuration.getRunOnThreadHandlers().getRunOnThreadHandler()) {
                 try {
-                    this.threadRunnerClassList.add((Class<? extends RunOnThread>) Class.forName(threadRunnerClassString));
+                    this.runOnThreadHandlerClassList.add((Class<? extends RunOnThreadHandler>) Class.forName(runOnThreadHandlerClassString));
                 } catch (ClassNotFoundException e) {
-                    throw new JEBConfigurationException("Unable to find thread runner class: " + threadRunnerClassString, e);
+                    throw new JEBConfigurationException("Unable to find thread runner class: " + runOnThreadHandlerClassString, e);
                 }
             }
+            this.scannerRunOnThread = !configuration.getRunOnThreadHandlers().isUseClasspathScanner() ? null :
+                    new JEBConfiguration.ClasspathScanningConfiguration(configuration.getRunOnThreadHandlers().getClasspathScanningPackage());
         }
-        if (configuration.getSurroundActions() != null) {
-            for (final String surroundActionClassString : configuration.getSurroundActions().getSurroundAction()) {
+        if (configuration.getSurroundHandlers() != null) {
+            for (final String surroundHandlerClassString : configuration.getSurroundHandlers().getSurroundHandler()) {
                 try {
-                    this.surroundActionClassList.add((Class<? extends SurroundAction>) Class.forName(surroundActionClassString));
+                    this.surroundHandlerClassList.add((Class<? extends SurroundHandler>) Class.forName(surroundHandlerClassString));
                 } catch (ClassNotFoundException e) {
-                    throw new JEBConfigurationException("Unable to find surround action class: " + surroundActionClassString, e);
+                    throw new JEBConfigurationException("Unable to find surround action class: " + surroundHandlerClassString, e);
                 }
             }
+            this.scannerSurround = !configuration.getSurroundHandlers().isUseClasspathScanner() ? null :
+                    new JEBConfiguration.ClasspathScanningConfiguration(configuration.getSurroundHandlers().getClasspathScanningPackage());
         }
     }
 }

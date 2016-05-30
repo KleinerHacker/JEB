@@ -12,16 +12,22 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Descriptor for a receiver method (contains {@link ReceiverHandler}-Methods too, see second constructor)
  */
 public final class ReceiverMethodDescriptor {
     private final Method receiverMethod;
     private final ReceiverQualifierKey qualifierKey;
-    private final Annotation threadRunnerAnnotation;
+    private final Annotation runOnThreadAnnotation;
     private final List<Annotation> surroundAnnotationList = new ArrayList<>();
 
     private final Object instance;
 
+    /**
+     * Construct the descriptor from a {@link ReceiverHandler}.
+     * @param parameterClass
+     * @param receiverHandler
+     * @param <T>
+     */
     public <T>ReceiverMethodDescriptor(final Class<T> parameterClass, final ReceiverHandler<T> receiverHandler) {
         final Method method;
         try {
@@ -33,13 +39,18 @@ public final class ReceiverMethodDescriptor {
         final List<Annotation> qualifierAnnotationList = AnnotationReaderUtils.findQualifierAnnotations(method);
 
         this.receiverMethod = method;
-        this.threadRunnerAnnotation = AnnotationReaderUtils.findThreadRunnerAnnotation(method, false);
+        this.runOnThreadAnnotation = AnnotationReaderUtils.findRunOnThreadAnnotation(method, false);
         this.qualifierKey = new ReceiverQualifierKey(parameterClass, qualifierAnnotationList);
         this.surroundAnnotationList.addAll(AnnotationReaderUtils.findSurroundActionAnnotations(method));
 
         this.instance = receiverHandler;
     }
 
+    /**
+     * Create the descriptor from a receiver method, annotated with {@link EventReceiver}
+     * @param method
+     * @param instance
+     */
     public ReceiverMethodDescriptor(final Method method, final Object instance) {
         if (method.getAnnotation(EventReceiver.class) == null)
             throw new IllegalArgumentException("Method without annotation " + EventReceiver.class.getName() + ": " + method.toString());
@@ -52,29 +63,49 @@ public final class ReceiverMethodDescriptor {
         final List<Annotation> qualifierAnnotationList = AnnotationReaderUtils.findQualifierAnnotations(method);
 
         this.receiverMethod = method;
-        this.threadRunnerAnnotation = AnnotationReaderUtils.findThreadRunnerAnnotation(method, false);
+        this.runOnThreadAnnotation = AnnotationReaderUtils.findRunOnThreadAnnotation(method, false);
         this.qualifierKey = new ReceiverQualifierKey(method.getParameterTypes()[0], qualifierAnnotationList);
         this.surroundAnnotationList.addAll(AnnotationReaderUtils.findSurroundActionAnnotations(method));
 
         this.instance = instance;
     }
 
+    /**
+     * Qualifier-Key to find method if send via {@link org.pcsoft.framework.jeb.EventBus}
+     * @return
+     */
     public ReceiverQualifierKey getQualifierKey() {
         return qualifierKey;
     }
 
+    /**
+     * The receiver method
+     * @return
+     */
     public Method getReceiverMethod() {
         return receiverMethod;
     }
 
+    /**
+     * Instance of the class with receiver method
+     * @return
+     */
     public Object getInstance() {
         return instance;
     }
 
-    public Annotation getThreadRunnerAnnotation() {
-        return threadRunnerAnnotation;
+    /**
+     * Returns the optional Run-On-Thread Qualifier Annotation or NULL
+     * @return
+     */
+    public Annotation getRunOnThreadAnnotation() {
+        return runOnThreadAnnotation;
     }
 
+    /**
+     * A list of all surround qualifier annotations. Can be empty.
+     * @return
+     */
     public List<Annotation> getSurroundAnnotationList() {
         return Collections.unmodifiableList(surroundAnnotationList);
     }

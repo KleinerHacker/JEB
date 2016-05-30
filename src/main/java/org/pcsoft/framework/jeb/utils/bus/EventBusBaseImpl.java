@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represent the basic implementation for the {@link EventBus}, see {@link EventBusBuilder}
+ */
 final class EventBusBaseImpl implements EventBus {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventBusBaseImpl.class);
 
@@ -35,7 +38,7 @@ final class EventBusBaseImpl implements EventBus {
     }
 
     @Override
-    public RunOnThreadManager getThreadRunnerManager() {
+    public RunOnThreadManager getRunOnThreadManager() {
         return parentEventBusManager.getRunOnThreadManager();
     }
 

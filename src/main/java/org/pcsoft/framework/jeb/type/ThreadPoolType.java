@@ -1,9 +1,15 @@
 package org.pcsoft.framework.jeb.type;
 
 /**
- * Created by pfeifchr on 26.05.2016.
+ * Types of thread pool
  */
 public enum ThreadPoolType {
+    /**
+     * Cached Thread Pool
+     */
     CachedPool,
+    /**
+     * Fixed Thread Pool with limit
+     */
     FixedPool
 }

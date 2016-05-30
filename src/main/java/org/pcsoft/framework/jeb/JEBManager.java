@@ -3,8 +3,12 @@ package org.pcsoft.framework.jeb;
 import org.pcsoft.framework.jeb.config.JEBConfiguration;
 
 /**
- * Created by pfeifchr on 27.05.2016.
+ * Basic for all in JEB used manager
  */
 public interface JEBManager {
+    /**
+     * Returns the configuration
+     * @return
+     */
     JEBConfiguration getConfiguration();
 }

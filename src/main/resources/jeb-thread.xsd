@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://pcsoft.org/jeb/config/threading" xmlns:th="http://pcsoft.org/jeb/config/threading">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://pcsoft.org/jeb/config/threading"
+           xmlns:th="http://pcsoft.org/jeb/config/threading"
+           xmlns:c="http://pcsoft.org/jeb/config/common">
+
+    <xs:import namespace="http://pcsoft.org/jeb/config/common" schemaLocation="jeb-common.xsd"/>
+
     <xs:complexType name="XThreadPool" abstract="true"/>
     <xs:complexType name="XCachedThreadPool">
         <xs:complexContent>
@@ -22,9 +27,10 @@
         </xs:choice>
     </xs:complexType>
 
-    <xs:complexType name="XThreadRunnerList">
+    <xs:complexType name="XRunOnThreadHandlerList">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="ThreadRunner" type="xs:string"/>
+            <xs:element name="RunOnThreadHandler" type="xs:string"/>
         </xs:sequence>
+        <xs:attributeGroup ref="c:XClassPathScanning"/>
     </xs:complexType>
 </xs:schema>

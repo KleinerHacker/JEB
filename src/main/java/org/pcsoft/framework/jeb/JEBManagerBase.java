@@ -3,7 +3,7 @@ package org.pcsoft.framework.jeb;
 import org.pcsoft.framework.jeb.config.JEBConfiguration;
 
 /**
- * Created by pfeifchr on 27.05.2016.
+ * Abstract base implementation for all JEB-Manager
  */
 public abstract class JEBManagerBase implements JEBManager {
     protected final JEBConfiguration configuration;

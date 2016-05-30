@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by pfeifchr on 27.05.2016.
+ * Utils to read annotations
  */
 public final class AnnotationReaderUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationReaderUtils.class);
@@ -44,7 +44,7 @@ public final class AnnotationReaderUtils {
      * @param annotatedElement
      * @return
      */
-    public static Annotation findThreadRunnerAnnotation(AnnotatedElement annotatedElement, boolean searchOnClass) {
+    public static Annotation findRunOnThreadAnnotation(AnnotatedElement annotatedElement, boolean searchOnClass) {
         Annotation resultAnnotation = null;
 
         final Annotation[] annotations = annotatedElement.getAnnotations();
@@ -61,7 +61,7 @@ public final class AnnotationReaderUtils {
             if (resultAnnotation == null && annotatedElement instanceof Method) {
                 Class currentClass = ((Method) annotatedElement).getDeclaringClass();
                 while (currentClass != null && currentClass != Object.class && resultAnnotation == null) {
-                    resultAnnotation = findThreadRunnerAnnotation(currentClass, true);
+                    resultAnnotation = findRunOnThreadAnnotation(currentClass, true);
                     currentClass = currentClass.getSuperclass();
                 }
             }

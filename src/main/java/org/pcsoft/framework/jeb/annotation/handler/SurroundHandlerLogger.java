@@ -9,11 +9,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * Created by pfeifchr on 27.05.2016.
+ * Represent the abstract Surround Handler implementation for a method logger. See the builtin implementations of
+ * {@link SurroundHandlerMethodLogger} and {@link SurroundHandlerTimeLogger}.
  */
-public abstract class SurroundActionLogger<T extends Annotation> extends SurroundActionBase<T> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SurroundActionLogger.class);
-
+public abstract class SurroundHandlerLogger<T extends Annotation> extends SurroundHandlerBase<T> {
     protected final String buildMessage(PrintType printType, Method method, String prefix) {
         final String message;
         switch (printType) {
@@ -29,7 +28,8 @@ public abstract class SurroundActionLogger<T extends Annotation> extends Surroun
         return message;
     }
 
-    protected final void logOut(LoggingLevel loggingLevel, String message) {
+    protected final void logOut(Class loggerClass, LoggingLevel loggingLevel, String message) {
+        final Logger LOGGER = LoggerFactory.getLogger(loggerClass);
         switch (loggingLevel) {
             case Error:
                 LOGGER.error(message);

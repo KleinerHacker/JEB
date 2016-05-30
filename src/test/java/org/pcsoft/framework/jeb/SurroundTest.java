@@ -3,7 +3,7 @@ package org.pcsoft.framework.jeb;
 import org.junit.Assert;
 import org.junit.Test;
 import org.pcsoft.framework.jeb.annotation.EventReceiver;
-import org.pcsoft.framework.jeb.annotation.handler.SurroundActionBase;
+import org.pcsoft.framework.jeb.annotation.handler.SurroundHandlerBase;
 import org.pcsoft.framework.jeb.config.JEBConfiguration;
 import org.pcsoft.framework.jeb.config.JEBConfigurationFactory;
 import org.pcsoft.framework.jeb.qualifier.surround.SurroundMethod1;
@@ -13,9 +13,6 @@ import org.pcsoft.framework.jeb.qualifier.surround.SurroundMethodWithValue;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by pfeifchr on 27.05.2016.
- */
 public class SurroundTest {
     private static final String VAL_TEST = "Test";
     private static final String VAL_PRODUCTION = "Production";
@@ -24,7 +21,7 @@ public class SurroundTest {
             valueProductionCounter = new AtomicInteger(0);
 
     @SurroundMethod1
-    public static final class SurroundActionMethod1 extends SurroundActionBase<SurroundMethod1> {
+    public static final class SurroundHandlerMethod1 extends SurroundHandlerBase<SurroundMethod1> {
         @Override
         public void onPostInvoke(SurroundMethod1 annotation, Method method, Object value) {
             method1Counter.incrementAndGet();
@@ -37,7 +34,7 @@ public class SurroundTest {
     }
 
     @SurroundMethod2
-    public static final class SurroundActionMethod2 extends SurroundActionBase<SurroundMethod2> {
+    public static final class SurroundHandlerMethod2 extends SurroundHandlerBase<SurroundMethod2> {
         @Override
         public void onPostInvoke(SurroundMethod2 annotation, Method method, Object value) {
             method2Counter.incrementAndGet();
@@ -50,7 +47,7 @@ public class SurroundTest {
     }
 
     @SurroundMethodWithValue
-    public static final class SurroundActionMethodWithValue extends SurroundActionBase<SurroundMethodWithValue> {
+    public static final class SurroundHandlerMethodWithValue extends SurroundHandlerBase<SurroundMethodWithValue> {
         @Override
         public void onPostInvoke(SurroundMethodWithValue annotation, Method method, Object value) {
             count(annotation.identifier());
@@ -74,9 +71,9 @@ public class SurroundTest {
     }
 
     private final JEBConfiguration configuration = JEBConfigurationFactory.createDefaultBuilder()
-            .withAdditionalSurroundAction(SurroundActionMethod1.class)
-            .withAdditionalSurroundAction(SurroundActionMethod2.class)
-            .withAdditionalSurroundAction(SurroundActionMethodWithValue.class)
+            .withAdditionalSurroundHandler(SurroundHandlerMethod1.class)
+            .withAdditionalSurroundHandler(SurroundHandlerMethod2.class)
+            .withAdditionalSurroundHandler(SurroundHandlerMethodWithValue.class)
             .build();
     private final EventBus eventBus = EventBusManager.create(configuration).getEventBus();
 

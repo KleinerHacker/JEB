@@ -77,6 +77,7 @@
                                 <schemaInclude>jeb-bus.xsd</schemaInclude>
                                 <schemaInclude>jeb-thread.xsd</schemaInclude>
                             </schemaIncludes>
+                            <generatePackage>org.pcsoft.framework.jeb.config.xml</generatePackage>
                         </configuration>
                     </execution>
                 </executions>
@@ -106,6 +107,11 @@
                 <artifactId>commons-lang</artifactId>
                 <version>2.6</version>
             </dependency>
+            <dependency>
+                <groupId>io.github.lukehutch</groupId>
+                <artifactId>fast-classpath-scanner</artifactId>
+                <version>1.9.18</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -126,6 +132,10 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.lukehutch</groupId>
+            <artifactId>fast-classpath-scanner</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
